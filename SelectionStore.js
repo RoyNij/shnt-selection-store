@@ -9,35 +9,14 @@
  * 
  * @param {Object} opts { initialSelection: [], key: undefined }
  */
-function isObject( value ){
-	if( value !== undefined ){
-		if( value !== null ){
-			return 'object' === typeof value && !Array.isArray( value );
-		}
-	}
-	return false
-}
+const {
+	arrayEquals
+} = require('./ArrayHelpers');
 
-function getValueFromKey( object, key ){
-	const keys = key.split(".");
-	
-	if( keys.length < 2 ){
-		return object[ key ];
-	} else {
-		key = keys.shift();
-		return getValueFromKey( object[ key ], keys.join(".") );
-	}
-}
-
-function array_equals( arr1, arr2 ){
-	if( !Array.isArray( arr1 ) || !Array.isArray( arr2 ) ){
-		return false;
-	}
-	if( arr1.length !== arr2.length ){
-		return false;
-	}
-	return arr1.every( (val, i ) => val === arr2[ i ] );
-}
+const {
+	isObject,
+	getValueFromKey
+} = require('./ObjectHelpers');
 
 function SelectionStore( opts ){
 	let selectionKey = opts ? opts.key : undefined;
@@ -110,7 +89,7 @@ function SelectionStore( opts ){
 		
 		if( multidimensional && Array.isArray( value ) ){
 			return selection.findIndex( s => {
-				return array_equals( s, value )
+				return arrayEquals( s, value )
 			} )
 		}
 
