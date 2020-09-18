@@ -119,7 +119,7 @@ function SelectionStore( opts ){
 	 */
 	values.add = ( value ) => {
 		if( !values.contains( value ) ){
-			isObject( value ) ? select.push( value[ selectionKey ] ) : selection.push( value )
+			isObject( value ) ? selection.push( value[ selectionKey ] ) : selection.push( value )
 		}
 	}
 
