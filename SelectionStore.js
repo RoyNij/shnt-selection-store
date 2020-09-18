@@ -133,7 +133,7 @@ function SelectionStore( opts ){
 	 */
 	values.toggle = ( value ) => {
 		if( values.contains( value ) ){
-			selection.splice( selection.getIndex( value ), 1 );
+			selection.splice( values.getIndex( value ), 1 );
 		} else {
 			values.add( value );
 		}
