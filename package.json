@@ -1,0 +1,23 @@
+{
+  "name": "selection-store",
+  "version": "1.0.0",
+  "description": "Simple function to store and toggle values in a selection",
+  "main": "SelectionStore.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "mocha": "^8.1.3"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "keywords": [
+    "personal",
+    "simple"
+  ],
+  "author": "Roy Nijhof",
+  "license": "MIT"
+}
