@@ -115,6 +115,16 @@ describe( "Checks", () => {
 			let test = new SelectionStore( {key: 'ID', initialSelection: initialObjectSelection } )
 			expect( test.contains( {'ID': 99 } ) ).to.be.a( 'boolean' ).and.equal( false );
 		})
+
+		it( "Should find an existing value based on nested keys", () => {
+			let test = new SelectionStore( {key: "ID.id", initialSelection: [ { "ID" : { "id" : 1 } } ] })
+			expect( test.contains( {'ID' : { 'id' : 1 } } ) ).to.be.a( 'boolean' ).and.equal( true );
+		})
+
+		it( "Should find not find a non-existing value based on nested keys", () => {
+			let test = new SelectionStore( {key: "ID.id", initialSelection: [ 1 ] })
+			expect( test.contains( {'ID' : { 'id' : 5 } } ) ).to.be.a( 'boolean' ).and.equal( false );
+		})
 	} )
 })
 

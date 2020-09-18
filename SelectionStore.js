@@ -18,6 +18,17 @@ function isObject( value ){
 	return false
 }
 
+function getValueFromKey( object, key ){
+	const keys = key.split(".");
+	
+	if( keys.length < 2 ){
+		return object[ key ];
+	} else {
+		key = keys.shift();
+		return getValueFromKey( object[ key ], keys.join(".") );
+	}
+}
+
 function SelectionStore( opts ){
 	let selectionKey = opts ? opts.key : undefined;
 	const selection = setInitialSelection( opts )
@@ -48,12 +59,13 @@ function SelectionStore( opts ){
 			// Filter out initial selections without the required key
 			return opts.initialSelection
 				.filter( s => {
-					if( s[ selectionKey ] === undefined ){
+					const val = getValueFromKey(s, selectionKey );
+					if( val === undefined ){
 						console.warn( "WARNING: Some members of your initial selection do not have the required key and will be ignored")
 					}
-					return s[ selectionKey ] !== undefined
+					return val !== undefined
 				} )
-				.map( s => s[ selectionKey ] );
+				.map( s => getValueFromKey(s, selectionKey ) );
 		} else {
 			// If we are dealing  with a simple array that should be returned
 			return opts.initialSelection;
@@ -86,7 +98,7 @@ function SelectionStore( opts ){
 			return selection.indexOf( value )
 		}
 		return selection.findIndex( s => {
-			return s === value[ selectionKey ]
+			return s === getValueFromKey( value, selectionKey )
 		});
 	}
 	
@@ -108,7 +120,7 @@ function SelectionStore( opts ){
 		if( values.contains( value ) ){
 			selection.splice( selection.getIndex( value ), 1 );
 		} else {
-			isObject( value ) ? selection.push( value[ selectionKey ] ) : selection.push( value );
+			values.add( value );
 		}
 	}
 
@@ -119,7 +131,10 @@ function SelectionStore( opts ){
 	 */
 	values.add = ( value ) => {
 		if( !values.contains( value ) ){
-			isObject( value ) ? select.push( value[ selectionKey ] ) : selection.push( value )
+			if( isObject( value ) ) {
+				return values.add( getValueFromKey( value, selectionKey ) )
+			}
+			selection.push( value )
 		}
 	}
 
