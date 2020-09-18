@@ -126,6 +126,18 @@ describe( "Checks", () => {
 			expect( test.contains( {'ID' : { 'id' : 5 } } ) ).to.be.a( 'boolean' ).and.equal( false );
 		})
 	} )
+
+	describe( "Multidimensional selections", () => {
+		it( "Should find an existing multidimensional selection", () => {
+			let test = new SelectionStore( {multidimensional: true, initialSelection: [ [1, 2] ]} );
+			expect( test.contains( [1, 2] ) ).to.be.a( 'boolean' ).and.equal( true );
+		})
+
+		it( "Should not find a non-existing multidimensional selection", () => {
+			let test = new SelectionStore( {multidimensional: true, initialSelection: [ [1, 2] ]} );
+			expect( test.contains( [2, 1] ) ).to.be.a( 'boolean' ).and.equal( false );
+		})
+	})
 })
 
 describe( "Error Handling", () => {

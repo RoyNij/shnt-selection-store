@@ -12,7 +12,7 @@
 function isObject( value ){
 	if( value !== undefined ){
 		if( value !== null ){
-			return 'object' === typeof value
+			return 'object' === typeof value && !Array.isArray( value );
 		}
 	}
 	return false
@@ -29,10 +29,20 @@ function getValueFromKey( object, key ){
 	}
 }
 
+function array_equals( arr1, arr2 ){
+	if( !Array.isArray( arr1 ) || !Array.isArray( arr2 ) ){
+		return false;
+	}
+	if( arr1.length !== arr2.length ){
+		return false;
+	}
+	return arr1.every( (val, i ) => val === arr2[ i ] );
+}
+
 function SelectionStore( opts ){
 	let selectionKey = opts ? opts.key : undefined;
-	const selection = setInitialSelection( opts )
-	
+	let multidimensional = opts ? opts.multidimensional : false;
+	const selection = setInitialSelection( opts );
 
 	function setInitialSelection( opts ){
 		// Deal with undefineds and empty arrays
@@ -53,7 +63,7 @@ function SelectionStore( opts ){
 		// If we are dealing with objects in the initial selection
 		if( isObject( opts.initialSelection[ 0 ] ) ){
 			if( opts.key === undefined){
-				throw new Error( "ERROR: Cannot initialize a selection of objects without idetifying key" );
+				throw new Error( "ERROR: Cannot initialize a selection of objects without identifying key" );
 			}
 			
 			// Filter out initial selections without the required key
@@ -91,20 +101,25 @@ function SelectionStore( opts ){
 
 	/**
 	 * Function to get  Sthe pontential index of a value given to it
-	 * @param { Number|String|Object } value 
+	 * @param { Number|String|Object|Array } value 
 	 */
 	values.getIndex = ( value ) => {
-		if( selectionKey === undefined ){
-			return selection.indexOf( value )
+		if( selectionKey !== undefined && isObject( value ) ){
+			return values.getIndex( getValueFromKey( value, selectionKey ) );
 		}
-		return selection.findIndex( s => {
-			return s === getValueFromKey( value, selectionKey )
-		});
+		
+		if( multidimensional && Array.isArray( value ) ){
+			return selection.findIndex( s => {
+				return array_equals( s, value )
+			} )
+		}
+
+		return selection.indexOf( value );
 	}
 	
 	/**
 	 * Function to check whether the value is contained in the selection
-	 * @param { Number|String|Object } value 
+	 * @param { Number|String|Object|Array } value 
 	 */
 	values.contains = ( value ) => {
 		checkValue( value );
