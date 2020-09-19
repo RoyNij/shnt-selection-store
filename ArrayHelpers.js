@@ -10,7 +10,7 @@ function arrayEquals( arr1, arr2 ){
 
 function arrayContains( arr, value ){
 	if( Array.isArray( value ) ){
-		return arr.findIndex( a => arrayEquals( a, value ) )
+		return arr.findIndex( a => arrayEquals( a, value ) ) > -1
 	}
 	return arr.indexOf( value ) > -1
 }
