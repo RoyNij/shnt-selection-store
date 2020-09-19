@@ -38,6 +38,9 @@ const SelectionStoreMixin = {
 		},
 		selectionContains( value ){
 			return this.getIndexInSelection( value ) > -1
+		},
+		emptySelection(){
+			this.selectionStore = []
 		}
 	}
 }
