@@ -8,6 +8,14 @@ function arrayEquals( arr1, arr2 ){
 	return arr1.every( (val, i ) => val === arr2[ i ] );
 }
 
+function arrayContains( arr, value ){
+	if( Array.isArray( value ) ){
+		return arr.findIndex( a => arrayEquals( a, value ) )
+	}
+	return arr.indexOf( value ) > -1
+}
+
 module.exports = {
 	arrayEquals,
+	arrayContains
 }
