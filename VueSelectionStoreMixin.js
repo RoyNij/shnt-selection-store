@@ -12,10 +12,14 @@ const SelectionStoreMixin = {
 		}
 	},
 	methods: {
-		toggleInSelection( value ){
+		toggleInSelection( value, multiple ){
+			m = multiple || false
 			if( this.selectionContains( value ) ){
 				this.removeFromSelection( value )
 			} else {
+				if( !m ){
+					this.emptySelection()
+				}
 				this.addToSelection( value )
 			}
 		},
