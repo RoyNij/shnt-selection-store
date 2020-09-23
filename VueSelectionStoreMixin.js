@@ -3,17 +3,16 @@ const { arrayEquals } = require("./ArrayHelpers")
 const SelectionStoreMixin = {
 	data: function(){
 		return {
-			selectionStore: []
+			selectionStore: [],
 		}
 	},
 	computed: {
 		selectionIsEmpty(){
-			return this.selectionStore.length < 1
+			return this.selectionStore.length < 1;
 		}
 	},
 	methods: {
-		toggleInSelection( value, multiple ){
-			m = multiple || false
+		toggleInSelection( value ){
 			if( this.selectionContains( value ) ){
 				this.removeFromSelection( value )
 			} else {
@@ -36,7 +35,9 @@ const SelectionStoreMixin = {
 		getIndexInSelection( value ){
 			if( Array.isArray( value ) ){
 				return this.selectionStore
-					.findIndex( s => arrayEquals( s, value ) )
+					.findIndex( s => { 
+						return arrayEquals( s, value ) 
+					})
 			}
 			return this.selectionStore.indexOf( value )
 		},
